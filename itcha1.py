@@ -1,23 +1,22 @@
 import itchat
+import a
 from itchat.content import *
-
-@itchat.msg_register([TEXT, MAP, CARD, NOTE, SHARING])
+import urllib
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+@itchat.msg_register(TEXT)
 def text_reply(msg):
-    itchat.send('%s: %s' % (msg['Type'], msg['Text']),toUserName='filehelper')
-
-@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
-def download_files(msg):
-    msg['Text'](msg['FileName'])
-    return '@%s@%s' % ({'Picture': 'img', 'Video': 'vid'}.get(msg['Type'], 'fil'), msg['FileName'])
-
-@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO],isGroupChat = True)
-def download_files(msg):
-    msg['Text'](msg['FileName'])
-    itchat.send('@%s@%s' % ({'Picture': 'img', 'Video': 'vid'}.get(msg['Type'], 'fil'), msg['FileName']),toUserName='filehelper')
-
-@itchat.msg_register(TEXT, isGroupChat = True)
-def groupchat_reply(msg):
-    itchat.send(u'@%s\u2005I  %s' % (msg['ActualNickName'], msg['Content']), toUserName='filehelper')
-
+    usr=msg['Text'][
+    #print usr
+    text,pub_time,i=a.record(usr)
+    #print text
+    print type(text)
+    #text=str(text)
+    #itchat.send('I\'m OK to send to you!',toUserName='filehelper')
+    itchat.send(text,toUserName='filehelper')
+    for count in xrange(i):
+        itchat.send_image(pub_time+str(count)+'.jpg',toUserName='filehelper')
+#itchat.send_image('201710060216320.jpg',toUserName='filehelper')
 itchat.auto_login(True)
 itchat.run()
